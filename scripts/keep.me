@@ -1,0 +1,40 @@
+import pandas as pd
+
+# Carregar os arquivos CSV
+etsy_file = "/mnt/data/Meganium_Sales_Data_-_Etsy.csv"
+shopee_file = "/mnt/data/Meganium_Sales_Data_-_Shopee.csv"
+aliexpress_file = "/mnt/data/Meganium_Sales_Data_-_AliExpress.csv"
+
+# Ler os arquivos CSV
+etsy_data = pd.read_csv(etsy_file)
+shopee_data = pd.read_csv(shopee_file)
+aliexpress_data = pd.read_csv(aliexpress_file)
+
+# Identificar as colunas relevantes em cada dataset
+etsy_columns = etsy_data.columns
+shopee_columns = shopee_data.columns
+aliexpress_columns = aliexpress_data.columns
+
+# Verificar a estrutura das colunas para padronizar a análise
+etsy_data.head(), shopee_data.head(), aliexpress_data.head()
+
+
+
+# Concatenar os três datasets em um único dataframe
+all_data = pd.concat([etsy_data, shopee_data, aliexpress_data], ignore_index=True)
+
+# Agrupar por produto e somar a quantidade vendida
+product_sales = all_data.groupby("product_sold")["quantity"].sum()
+
+# Identificar o produto mais vendido
+most_sold_product = product_sales.idxmax()
+most_sold_quantity = product_sales.max()
+
+most_sold_product, most_sold_quantity
+
+
+
+# Identificar os produtos menos vendidos (os de menor quantidade total vendida)
+least_sold_products = product_sales.nsmallest(3)  # Pegando os 3 menos vendidos
+
+least_sold_products
